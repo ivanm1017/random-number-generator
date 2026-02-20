@@ -114,8 +114,8 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-zinc-100 flex items-center justify-center p-4 font-sans text-zinc-900">
-      <div className="bg-white rounded-[2rem] shadow-2xl shadow-zinc-200/50 border border-zinc-200/60 w-full max-w-md overflow-hidden">
+    <div className="min-h-screen bg-black flex items-center justify-center p-4 font-sans text-white">
+      <div className="bg-black rounded-[2rem] shadow-2xl shadow-zinc-800/20 border border-zinc-800 w-full max-w-md overflow-hidden">
         {/* Header */}
         <div className="bg-zinc-900 text-white p-6 text-center">
           <h1 className="text-2xl font-semibold tracking-tight">Random Number</h1>
@@ -123,10 +123,10 @@ export default function App() {
         </div>
         
         {/* Display Area */}
-        <div className="p-8 flex flex-col items-center justify-center border-b border-zinc-100 bg-zinc-50/50 min-h-[280px]">
+        <div className="p-8 flex flex-col items-center justify-center border-b border-zinc-800 bg-black min-h-[280px]">
           <div 
             className={`text-9xl font-bold tracking-tighter transition-transform duration-150 ${
-              isGenerating ? 'scale-95 text-indigo-500' : 'scale-100 text-zinc-900'
+              isGenerating ? 'scale-95 text-zinc-400' : 'scale-100 text-white'
             }`}
           >
             {currentNumber !== null ? currentNumber : '-'}
@@ -143,7 +143,7 @@ export default function App() {
                 type="number" 
                 value={min}
                 onChange={(e) => setMin(e.target.value === '' ? '' : parseInt(e.target.value))}
-                className="w-full bg-zinc-100 border-2 border-transparent focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 rounded-2xl px-4 py-3 text-lg font-semibold text-center transition-all outline-none"
+                className="w-full bg-zinc-900 border-2 border-transparent focus:bg-zinc-800 focus:border-green-500 focus:ring-4 focus:ring-green-500/10 rounded-2xl px-4 py-3 text-lg font-semibold text-center transition-all outline-none text-white"
               />
             </div>
             
@@ -154,7 +154,7 @@ export default function App() {
                 type="number" 
                 value={max}
                 onChange={(e) => setMax(e.target.value === '' ? '' : parseInt(e.target.value))}
-                className="w-full bg-zinc-100 border-2 border-transparent focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 rounded-2xl px-4 py-3 text-lg font-semibold text-center transition-all outline-none"
+                className="w-full bg-zinc-900 border-2 border-transparent focus:bg-zinc-800 focus:border-green-500 focus:ring-4 focus:ring-green-500/10 rounded-2xl px-4 py-3 text-lg font-semibold text-center transition-all outline-none text-white"
               />
             </div>
             
@@ -167,7 +167,7 @@ export default function App() {
                 step="0.5"
                 value={timer}
                 onChange={(e) => setTimer(e.target.value === '' ? '' : parseFloat(e.target.value))}
-                className="w-full bg-zinc-100 border-2 border-transparent focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 rounded-2xl px-4 py-3 text-lg font-semibold text-center transition-all outline-none"
+                className="w-full bg-zinc-900 border-2 border-transparent focus:bg-zinc-800 focus:border-green-500 focus:ring-4 focus:ring-green-500/10 rounded-2xl px-4 py-3 text-lg font-semibold text-center transition-all outline-none text-white"
               />
             </div>
           </div>
@@ -178,8 +178,8 @@ export default function App() {
               onClick={() => setAudioEnabled(!audioEnabled)}
               className={`flex items-center justify-center p-4 rounded-2xl transition-all ${
                 audioEnabled 
-                  ? 'bg-indigo-100 text-indigo-700 hover:bg-indigo-200' 
-                  : 'bg-zinc-100 text-zinc-500 hover:bg-zinc-200'
+                  ? 'bg-green-900/30 text-green-400 hover:bg-green-900/50' 
+                  : 'bg-zinc-900 text-zinc-500 hover:bg-zinc-800'
               }`}
               title={audioEnabled ? "Disable Audio" : "Enable Audio"}
             >
@@ -189,9 +189,11 @@ export default function App() {
             <button
               onClick={handleManualGenerate}
               className={`flex-1 rounded-2xl py-4 px-6 font-bold text-lg flex items-center justify-center gap-3 transition-all ${
-                isAutoGenerating || ((typeof timer !== 'number' || timer === 0) && isGenerating)
-                  ? 'bg-zinc-800 text-zinc-300 shadow-inner scale-[0.98]'
-                  : 'bg-zinc-900 hover:bg-zinc-800 text-white shadow-lg shadow-zinc-900/20 active:scale-[0.98]'
+                isAutoGenerating
+                  ? 'bg-red-600 hover:bg-red-500 text-white shadow-inner scale-[0.98]'
+                  : isGenerating && (typeof timer !== 'number' || timer === 0)
+                    ? 'bg-green-700 text-white shadow-inner scale-[0.98]'
+                    : 'bg-green-600 hover:bg-green-500 text-white shadow-lg shadow-green-900/20 active:scale-[0.98]'
               }`}
             >
               <RefreshCw size={22} strokeWidth={2.5} className={isAutoGenerating || isGenerating ? 'animate-spin' : ''} />
