@@ -1,0 +1,5 @@
+{
+  "name": "Random Number Generator",
+  "description": "A customizable random integer generator with timer and audio features.",
+  "requestFramePermissions": []
+}
