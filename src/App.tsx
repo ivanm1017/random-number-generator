@@ -40,7 +40,52 @@ export default function App() {
   const [isGenerating, setIsGenerating] = useState<boolean>(false);
   const [isAutoGenerating, setIsAutoGenerating] = useState<boolean>(false);
   const [lastTrigger, setLastTrigger] = useState<number>(Date.now());
+  const wakeLockRef = useRef<any>(null);
   
+  // Wake Lock logic to prevent screen sleep
+  const requestWakeLock = useCallback(async () => {
+    if ('wakeLock' in navigator) {
+      try {
+        wakeLockRef.current = await (navigator as any).wakeLock.request('screen');
+        console.log('Wake Lock is active');
+      } catch (err: any) {
+        console.error(`${err.name}, ${err.message}`);
+      }
+    }
+  }, []);
+
+  const releaseWakeLock = useCallback(async () => {
+    if (wakeLockRef.current !== null) {
+      try {
+        await wakeLockRef.current.release();
+        wakeLockRef.current = null;
+        console.log('Wake Lock released');
+      } catch (err: any) {
+        console.error(`${err.name}, ${err.message}`);
+      }
+    }
+  }, []);
+
+  useEffect(() => {
+    if (isAutoGenerating) {
+      requestWakeLock();
+    } else {
+      releaseWakeLock();
+    }
+
+    const handleVisibilityChange = async () => {
+      if (wakeLockRef.current !== null && document.visibilityState === 'visible') {
+        await requestWakeLock();
+      }
+    };
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+      releaseWakeLock();
+    };
+  }, [isAutoGenerating, requestWakeLock, releaseWakeLock]);
+
   // We use a ref to track the latest values without triggering re-renders in the timeout
   const stateRef = useRef({ min, max, audioEnabled, currentNumber });
   
