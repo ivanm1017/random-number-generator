@@ -146,16 +146,14 @@ export default function App() {
 
   const handleManualGenerate = () => {
     const currentTimer = typeof timer === 'number' ? timer : 0;
-    if (currentTimer > 0) {
-      if (isAutoGenerating) {
-        setIsAutoGenerating(false);
-      } else {
-        setIsAutoGenerating(true);
-        generateNumber();
-      }
-    } else {
-      generateNumber();
+    if (currentTimer > 0 && !isAutoGenerating) {
+      setIsAutoGenerating(true);
     }
+    generateNumber();
+  };
+
+  const handleStopGenerating = () => {
+    setIsAutoGenerating(false);
   };
 
   return (
@@ -218,31 +216,39 @@ export default function App() {
           </div>
           
           {/* Actions */}
-          <div className="flex items-center gap-4 pt-2">
+          <div className="flex items-center gap-2 pt-2">
             <button
               onClick={() => setAudioEnabled(!audioEnabled)}
-              className={`flex items-center justify-center p-4 rounded-2xl transition-all ${
+              className={`flex-shrink-0 flex items-center justify-center p-3 rounded-2xl transition-all ${
                 audioEnabled 
                   ? 'bg-green-900/30 text-green-400 hover:bg-green-900/50' 
                   : 'bg-zinc-900 text-zinc-500 hover:bg-zinc-800'
               }`}
               title={audioEnabled ? "Disable Audio" : "Enable Audio"}
             >
-              {audioEnabled ? <Volume2 size={28} strokeWidth={2.5} /> : <VolumeX size={28} strokeWidth={2.5} />}
+              {audioEnabled ? <Volume2 size={24} strokeWidth={2.5} /> : <VolumeX size={24} strokeWidth={2.5} />}
             </button>
             
             <button
               onClick={handleManualGenerate}
-              className={`flex-1 rounded-2xl py-4 px-6 font-bold text-lg flex items-center justify-center gap-3 transition-all ${
-                isAutoGenerating
-                  ? 'bg-red-600 hover:bg-red-500 text-white shadow-inner scale-[0.98]'
-                  : isGenerating && (typeof timer !== 'number' || timer === 0)
-                    ? 'bg-green-700 text-white shadow-inner scale-[0.98]'
-                    : 'bg-green-600 hover:bg-green-500 text-white shadow-lg shadow-green-900/20 active:scale-[0.98]'
+              className={`flex-1 rounded-2xl py-4 px-2 font-bold text-sm sm:text-base flex items-center justify-center gap-2 transition-all bg-green-600 hover:bg-green-500 text-white shadow-lg shadow-green-900/20 active:scale-[0.98] ${
+                isGenerating && (typeof timer !== 'number' || timer === 0) ? 'bg-green-700 shadow-inner scale-[0.98]' : ''
               }`}
             >
-              <RefreshCw size={22} strokeWidth={2.5} className={isAutoGenerating || isGenerating ? 'animate-spin' : ''} />
-              {isAutoGenerating ? 'Stop Generating' : 'Generate Random'}
+              <RefreshCw size={18} strokeWidth={2.5} className={isGenerating ? 'animate-spin' : ''} />
+              Generate
+            </button>
+
+            <button
+              onClick={handleStopGenerating}
+              disabled={!isAutoGenerating}
+              className={`flex-1 rounded-2xl py-4 px-2 font-bold text-sm sm:text-base flex items-center justify-center gap-2 transition-all ${
+                isAutoGenerating
+                  ? 'bg-red-600 hover:bg-red-500 text-white shadow-lg shadow-red-900/20 active:scale-[0.98]'
+                  : 'bg-zinc-900 text-zinc-600 cursor-not-allowed opacity-50'
+              }`}
+            >
+              Stop
             </button>
           </div>
         </div>
