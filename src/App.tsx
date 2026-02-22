@@ -35,7 +35,7 @@ export default function App() {
   const [min, setMin] = useState<number | ''>(1);
   const [max, setMax] = useState<number | ''>(10);
   const [timer, setTimer] = useState<number | ''>(0);
-  const [audioEnabled, setAudioEnabled] = useState<boolean>(false);
+  const [audioEnabled, setAudioEnabled] = useState<boolean>(true);
   const [currentNumber, setCurrentNumber] = useState<number | null>(null);
   const [isGenerating, setIsGenerating] = useState<boolean>(false);
   const [isAutoGenerating, setIsAutoGenerating] = useState<boolean>(false);
@@ -161,8 +161,7 @@ export default function App() {
       <div className="bg-black rounded-[2rem] shadow-2xl shadow-zinc-800/20 border border-zinc-800 w-full max-w-md overflow-hidden">
         {/* Header */}
         <div className="bg-zinc-900 text-white p-6 text-center">
-          <h1 className="text-2xl font-semibold tracking-tight">Random Number</h1>
-          <p className="text-zinc-400 text-sm mt-1">Generate numbers on demand or with a delay</p>
+          <h1 className="text-2xl font-semibold tracking-tight">Random</h1>
         </div>
         
         {/* Display Area */}
@@ -172,13 +171,13 @@ export default function App() {
               isGenerating ? 'scale-95 text-zinc-400' : 'scale-100 text-white'
             }`}
           >
-            {currentNumber !== null ? currentNumber : '-'}
+            {currentNumber !== null ? currentNumber : '?'}
           </div>
         </div>
         
         {/* Controls */}
         <div className="p-6 space-y-6">
-          <div className="grid grid-cols-3 gap-4">
+          <div className="grid grid-cols-4 gap-3">
             {/* Min */}
             <div className="space-y-2">
               <label className="block text-center text-xs font-bold text-zinc-500 uppercase tracking-wider">Min</label>
@@ -186,7 +185,7 @@ export default function App() {
                 type="number" 
                 value={min}
                 onChange={(e) => setMin(e.target.value === '' ? '' : parseInt(e.target.value))}
-                className="w-full bg-zinc-900 border-2 border-transparent focus:bg-zinc-800 focus:border-green-500 focus:ring-4 focus:ring-green-500/10 rounded-2xl px-4 py-3 text-lg font-semibold text-center transition-all outline-none text-white"
+                className="w-full bg-zinc-900 border-2 border-transparent focus:bg-zinc-800 focus:border-green-500 focus:ring-4 focus:ring-green-500/10 rounded-2xl px-2 py-3 text-lg font-semibold text-center transition-all outline-none text-white"
               />
             </div>
             
@@ -197,7 +196,7 @@ export default function App() {
                 type="number" 
                 value={max}
                 onChange={(e) => setMax(e.target.value === '' ? '' : parseInt(e.target.value))}
-                className="w-full bg-zinc-900 border-2 border-transparent focus:bg-zinc-800 focus:border-green-500 focus:ring-4 focus:ring-green-500/10 rounded-2xl px-4 py-3 text-lg font-semibold text-center transition-all outline-none text-white"
+                className="w-full bg-zinc-900 border-2 border-transparent focus:bg-zinc-800 focus:border-green-500 focus:ring-4 focus:ring-green-500/10 rounded-2xl px-2 py-3 text-lg font-semibold text-center transition-all outline-none text-white"
               />
             </div>
             
@@ -210,45 +209,49 @@ export default function App() {
                 step="0.5"
                 value={timer}
                 onChange={(e) => setTimer(e.target.value === '' ? '' : parseFloat(e.target.value))}
-                className="w-full bg-zinc-900 border-2 border-transparent focus:bg-zinc-800 focus:border-green-500 focus:ring-4 focus:ring-green-500/10 rounded-2xl px-4 py-3 text-lg font-semibold text-center transition-all outline-none text-white"
+                className="w-full bg-zinc-900 border-2 border-transparent focus:bg-zinc-800 focus:border-green-500 focus:ring-4 focus:ring-green-500/10 rounded-2xl px-2 py-3 text-lg font-semibold text-center transition-all outline-none text-white"
               />
+            </div>
+
+            {/* Audio Toggle */}
+            <div className="space-y-2">
+              <label className="block text-center text-xs font-bold text-zinc-500 uppercase tracking-wider">Audio</label>
+              <button
+                onClick={() => setAudioEnabled(!audioEnabled)}
+                className={`w-full h-[56px] flex items-center justify-center rounded-2xl transition-all border-2 border-transparent ${
+                  audioEnabled 
+                    ? 'bg-green-900/30 text-green-400 hover:bg-green-900/50' 
+                    : 'bg-zinc-900 text-zinc-500 hover:bg-zinc-800'
+                }`}
+                title={audioEnabled ? "Disable Audio" : "Enable Audio"}
+              >
+                {audioEnabled ? <Volume2 size={22} strokeWidth={2.5} /> : <VolumeX size={22} strokeWidth={2.5} />}
+              </button>
             </div>
           </div>
           
           {/* Actions */}
-          <div className="flex items-center gap-2 pt-2">
-            <button
-              onClick={() => setAudioEnabled(!audioEnabled)}
-              className={`flex-shrink-0 flex items-center justify-center p-3 rounded-2xl transition-all ${
-                audioEnabled 
-                  ? 'bg-green-900/30 text-green-400 hover:bg-green-900/50' 
-                  : 'bg-zinc-900 text-zinc-500 hover:bg-zinc-800'
-              }`}
-              title={audioEnabled ? "Disable Audio" : "Enable Audio"}
-            >
-              {audioEnabled ? <Volume2 size={24} strokeWidth={2.5} /> : <VolumeX size={24} strokeWidth={2.5} />}
-            </button>
-            
+          <div className="flex flex-col gap-4 pt-2">
             <button
               onClick={handleManualGenerate}
-              className={`flex-1 rounded-2xl py-4 px-2 font-bold text-sm sm:text-base flex items-center justify-center gap-2 transition-all bg-green-600 hover:bg-green-500 text-white shadow-lg shadow-green-900/20 active:scale-[0.98] ${
+              className={`w-full rounded-2xl py-4 px-6 font-bold text-lg flex items-center justify-center gap-3 transition-all bg-green-600 hover:bg-green-500 text-white shadow-lg shadow-green-900/20 active:scale-[0.98] ${
                 isGenerating && (typeof timer !== 'number' || timer === 0) ? 'bg-green-700 shadow-inner scale-[0.98]' : ''
               }`}
             >
-              <RefreshCw size={18} strokeWidth={2.5} className={isGenerating ? 'animate-spin' : ''} />
-              Generate
+              <RefreshCw size={22} strokeWidth={2.5} className={isGenerating ? 'animate-spin' : ''} />
+              Generate Random
             </button>
 
             <button
               onClick={handleStopGenerating}
               disabled={!isAutoGenerating}
-              className={`flex-1 rounded-2xl py-4 px-2 font-bold text-sm sm:text-base flex items-center justify-center gap-2 transition-all ${
+              className={`w-full rounded-2xl py-4 px-6 font-bold text-lg flex items-center justify-center gap-3 transition-all ${
                 isAutoGenerating
                   ? 'bg-red-600 hover:bg-red-500 text-white shadow-lg shadow-red-900/20 active:scale-[0.98]'
                   : 'bg-zinc-900 text-zinc-600 cursor-not-allowed opacity-50'
               }`}
             >
-              Stop
+              Stop Generating
             </button>
           </div>
         </div>
