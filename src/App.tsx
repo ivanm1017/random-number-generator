@@ -74,7 +74,9 @@ export default function App() {
     }
 
     const handleVisibilityChange = async () => {
-      if (wakeLockRef.current !== null && document.visibilityState === 'visible') {
+      if (document.visibilityState === 'hidden') {
+        setIsAutoGenerating(false);
+      } else if (isAutoGenerating && document.visibilityState === 'visible') {
         await requestWakeLock();
       }
     };
